@@ -16,12 +16,24 @@ class RequestsTransport(Transport):
 
     Emit actions via awesome `requests`.
     """
+    def __init__(self, dsn=None, timeout=3, **kwargs):
+        self.timeout = 3
+        super(RequestsTransport, self).__init__(dsn, **kwargs)
 
     def emit(self, action, payload):
         """Emit action with payload via `requests.post`."""
         url = self.get_emit_api(action)
-        headers = {'User-Agent': 'rio/0.1.0', 'X-Rio-Protocol': '1'}
-        resp = requests.post(url, json=payload, headers=headers)
+        headers = {
+            'User-Agent': 'rio/0.1.0',
+            'X-Rio-Protocol': '1',
+        }
+        args = dict(
+            url=url,
+            json=payload,
+            headers=headers,
+            timeout=self.timeout,
+        )
+        resp = requests.post(**args)
         data = resp.json()
         is_success = resp.status_code == 200
         result = dict(
@@ -36,5 +48,5 @@ class RequestsTransport(Transport):
         return result
 
     def retry(self, times):
-        """Retry on request connection error."""
-        return Retry((requests.ConnectionError, ), times)
+        """Retry on request connection error/timeout."""
+        return Retry((requests.ConnectionError, requests.Timeout), times)
