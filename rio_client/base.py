@@ -11,10 +11,10 @@ from .transports.requests import RequestsTransport
 class Client(object):
     """Rio Client."""
 
-    def __init__(self, dsn=None):
+    def __init__(self, dsn=None, **kwargs):
         self.dsn = dsn
         self.context = parse_dsn(dsn)
-        self._transport = RequestsTransport(self.context)
+        self._transport = RequestsTransport(self.context, **kwargs)
 
     @property
     def transport(self):

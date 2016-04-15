@@ -11,7 +11,7 @@ class Transport(object):
     Emit actions via awesome `requests`.
     """
 
-    def __init__(self, context):
+    def __init__(self, context, **kwargs):
         self.context = context
 
     def get_emit_api(self, action):
