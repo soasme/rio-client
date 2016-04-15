@@ -6,12 +6,19 @@ rio.parser
 
 from urlparse import urlparse
 
-def parse_netloc(netloc):
+def parse_netloc(scheme, netloc):
     """Parse netloc string."""
     auth, _netloc = netloc.split('@')
     sender, token = auth.split(':')
-    domain, port = _netloc.split(':')
-    port = int(port or 80)
+    if ':' in _netloc:
+        domain, port = _netloc.split(':')
+        port = int(port)
+    else:
+        domain = _netloc
+        if scheme == 'https':
+            port = 443
+        else:
+            port = 80
     return dict(sender=sender, token=token, domain=domain, port=port)
 
 def parse_path(path):
@@ -22,14 +29,13 @@ def parse_path(path):
 def parse_dsn(dsn):
     """Parse dsn string."""
     parsed_dsn = urlparse(dsn)
-    parsed_netloc = parse_netloc(parsed_dsn.netloc)
     parsed_path = parse_path(parsed_dsn.path)
     return {
         'scheme': parsed_dsn.scheme,
-        'sender': parsed_netloc.get('sender'),
-        'token': parsed_netloc.get('token'),
-        'domain': parsed_netloc.get('domain'),
-        'port': parsed_netloc.get('port'),
+        'sender': parsed_dsn.username,
+        'token': parsed_dsn.password,
+        'domain': parsed_dsn.hostname,
+        'port': parsed_dsn.port or 80,
         'version': parsed_path.get('version'),
         'project': parsed_path.get('project'),
     }
