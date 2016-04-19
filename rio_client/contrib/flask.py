@@ -16,7 +16,7 @@ class Rio(object):
     def init_app(self, app, dsn=None):
         client_options = {}
 
-        client_options['dsn'] = dsn or app.config.get('dsn')
+        client_options['dsn'] = dsn or app.config.get('RIO_DSN')
         client_options['timeout'] = app.config.get('RIO_TIMEOUT')
 
         self.client = Client(**client_options)
@@ -28,4 +28,4 @@ class Rio(object):
 
     def emit(self, action, payload):
         """Emit action."""
-        self.client.emit(action, payload)
+        return self.client.emit(action, payload)
