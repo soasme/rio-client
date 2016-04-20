@@ -1,6 +1,11 @@
 HISTORY
 ========
 
+0.2.2
+--------------
+
+* typofix for flask extentions.
+
 0.2.1
 --------------
 
