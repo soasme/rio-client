@@ -21,7 +21,7 @@ class Rio(object):
 
         self.client = Client(**client_options)
 
-        if not hasattr(app, 'rio'):
+        if not hasattr(app, 'extensions'):
             app.extensions = {}
         app.extensions['rio'] = self
 
