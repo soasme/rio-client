@@ -11,6 +11,8 @@ import requests
 from ..retry import Retry
 from .base import Transport
 
+VERSION = '0.2.2'
+
 class RequestsTransport(Transport):
     """Requests Transport.
 
@@ -24,7 +26,7 @@ class RequestsTransport(Transport):
         """Emit action with payload via `requests.post`."""
         url = self.get_emit_api(action)
         headers = {
-            'User-Agent': 'rio/0.1.0',
+            'User-Agent': 'rio/%s' % VERSION,
             'X-Rio-Protocol': '1',
         }
         args = dict(
