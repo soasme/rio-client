@@ -13,6 +13,10 @@ app.config['RIO_TIMEOUT'] = 3
 rio = Rio()
 rio.init_app(app)
 
+@app.route('/admin')
+def index():
+    rio.emit('admin.visit', {'ip': request.remote_addr})
+    return 'hello world'
+
 if __name__ == '__main__':
-    with app.app_context():
-        print rio.emit('scrapy-item-scraped', {'item': {'type': 'sale'}})
+    app.run(debug=True)
