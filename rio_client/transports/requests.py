@@ -11,7 +11,7 @@ import requests
 from ..retry import Retry
 from .base import Transport
 
-VERSION = '0.2.3'
+VERSION = '0.2.4'
 
 class RequestsTransport(Transport):
     """Requests Transport.

@@ -20,7 +20,7 @@ test_requirements = [
 
 setup(
     name='rio-client',
-    version='0.2.3',
+    version='0.2.4',
     description="Client for Rio.",
     long_description=readme + '\n\n' + history,
     author="Ju Lin",

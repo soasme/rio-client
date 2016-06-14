@@ -8,7 +8,7 @@ rio.base
 from .parser import parse_dsn
 from .transports.requests import RequestsTransport
 
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 
 class Client(object):
     """Rio Client."""
