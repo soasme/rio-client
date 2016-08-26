@@ -44,8 +44,10 @@ class Rio(object):
 
         @app.after_request
         def after_request():
+            dumper = self.dumper
             for action, payload in g.rio_client_contextual:
                 self.emit_instantly(action, payload)
+                dumper.remove(action, payload)
 
 
     @property
@@ -82,12 +84,12 @@ class Rio(object):
     def delay_emit(self):
         dumper = self.dumper
         while True:
-            data = dumper.load_first()
-            if not data:
-                break
-            action, payload = data
-            self.emit_instantly(action, payload)
-            dumper.done_first()
+            with dumper.next() as data:
+                if not data:
+                    break
+                action, payload = data
+                self.emit_instantly(action, payload)
+                dumper.done(action, payload)
 
     @property
     def dumper(self):
