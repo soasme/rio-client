@@ -33,9 +33,28 @@ class Rio(object):
         app.extensions['rio'] = self
 
 
-    def emit(self, action, payload):
+    def emit(self, action, payload, level='instant'):
         """Emit action."""
+        if level == 'instant':
+            return self.emit_instantly(action, payload)
+        elif level == 'session':
+            return self.emit_context(action, payload)
+        elif level == 'later':
+            return self.emit_delayed(action, payload)
+        else:
+            raise Exception('InvalidEmitLevel: %s' % level)
+
+    def emit_instantly(self, action, payload):
+        """ Emit instantly. """
         return self.client.emit(action, payload)
+
+    def emit_context(self, action, payload):
+        """ Emit on exiting request context."""
+        pass
+
+    def emit_delayed(self, action, payload):
+        """ Emit by an independent worker."""
+        pass
 
     @property
     def current(self):
