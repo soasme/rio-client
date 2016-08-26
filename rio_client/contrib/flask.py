@@ -79,12 +79,23 @@ class Rio(object):
         """ Emit by an independent worker."""
         self.dump(action, payload)
 
-    def dump(self, action, payload):
+    def delay_emit(self):
+        while True:
+            data = dump.load_next()
+            if not data:
+                break
+            action, payload = data
+            self.emit_instantly(action, payload)
+
+    @property
+    def dumper(self):
         dump_class_string = self.dump_config['class']
         dump_class = import_string(dump_class_string)
         dump_params = self.dump_config['params']
-        dumper = dump_class(dump_params)
-        dumper.dump(action, payload)
+        return dump_class(dump_params)
+
+    def dump(self, action, payload):
+        self.dumper.dump(action, payload)
 
     @property
     def current(self):
