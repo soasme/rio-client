@@ -9,7 +9,6 @@ from flask import request
 from flask import current_app
 
 from rio_client.base import Client
-from rio_client.dumps import dump
 
 
 class Current(namedtuple('Current', 'action project uuid')):
@@ -69,12 +68,19 @@ class Rio(object):
 
     def emit_contextually(self, action, payload):
         """ Emit on exiting request context."""
-        dump(self.dump_config, action, payload)
+        self.dump(action, payload)
         return g.rio_client_contextual.append((action, payload, ))
 
     def emit_delayed(self, action, payload):
         """ Emit by an independent worker."""
-        dump(self.dump_config, action, payload)
+        self.dump(action, payload)
+
+    def dump(self, action, payload):
+        dump_class_string = self.dump_config['class']
+        dump_class = import_string(dump_class_string)
+        dump_params = self.dump_config['params']
+        dumper = dump_class(dump_params)
+        dumper.dump(action, payload)
 
     @property
     def current(self):
