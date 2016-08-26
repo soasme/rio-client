@@ -43,6 +43,11 @@ class Rio(object):
             for action, payload in g.rio_client_contextual:
                 self.emit_instantly(action, payload)
 
+    @property
+    def dump_config(self):
+        return {
+        }
+
 
     def emit(self, action, payload, level='instant'):
         """Emit action."""
@@ -61,12 +66,12 @@ class Rio(object):
 
     def emit_contextually(self, action, payload):
         """ Emit on exiting request context."""
-        dump(dump_config, action, payload)
+        dump(self.dump_config, action, payload)
         return g.rio_client_contextual.append((action, payload, ))
 
     def emit_delayed(self, action, payload):
         """ Emit by an independent worker."""
-        dump(dump_config, action, payload)
+        dump(self.dump_config, action, payload)
 
     @property
     def current(self):
