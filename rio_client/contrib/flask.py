@@ -6,6 +6,7 @@ from collections import namedtuple
 
 from flask import g
 from flask import request
+from flask import current_app
 
 from rio_client.base import Client
 from rio_client.dumps import dump
@@ -46,6 +47,8 @@ class Rio(object):
     @property
     def dump_config(self):
         return {
+            'class': current_app.config.get('RIO_CLIENT_DUMP_CLASS'),
+            'params': current_app.config.get('RIO_CLIENT_DUMP_PARAMS'),
         }
 
 
