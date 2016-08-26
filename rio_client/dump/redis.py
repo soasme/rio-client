@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import
 
+from contextlib import contextmanager
+
 import redis
 
 class RedisDump(object):
@@ -13,11 +15,15 @@ class RedisDump(object):
     def dump(self, action, payload):
         self.redis.lpush(self.key, json.dumps({'action': action, 'payload': payload}))
 
-    def load_first(self):
-        data = self.redis.lindex(self.key, 0)
-        if data:
-            data = json.loads(data)
-            return data.get('action'), data.get('payload')
+    @contextmanager
+    def next(self):
+        raw_data = self.redis.lindex(self.key, 0)
+        if raw_data:
+            data = json.loads(raw_data)
+            yield data.get('action'), data.get('payload')
+            self.remove(data.get('action'), data.get('payload'))
+        else:
+            yield None
 
-    def done_first(self):
-        self.redis.lpop(self.key)
+    def remove(self, action, payload):
+        self.redis.lrem(self.key, json.dumps({'action': action, 'payload': payload}))
