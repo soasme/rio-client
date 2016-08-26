@@ -42,8 +42,8 @@ class Rio(object):
         def before_request():
             g.rio_client_contextual = []
 
-        @app.teardown_request
-        def teardown_request():
+        @app.after_request
+        def after_request():
             for action, payload in g.rio_client_contextual:
                 self.emit_instantly(action, payload)
 
