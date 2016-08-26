@@ -80,12 +80,14 @@ class Rio(object):
         self.dump(action, payload)
 
     def delay_emit(self):
+        dumper = self.dumper
         while True:
-            data = dump.load_next()
+            data = dumper.load_first()
             if not data:
                 break
             action, payload = data
             self.emit_instantly(action, payload)
+            dumper.done_first()
 
     @property
     def dumper(self):

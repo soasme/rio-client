@@ -13,8 +13,11 @@ class RedisDump(object):
     def dump(self, action, payload):
         self.redis.lpush(self.key, json.dumps({'action': action, 'payload': payload}))
 
-    def load_next(self):
+    def load_first(self):
         data = self.redis.lindex(self.key, 0)
         if data:
             data = json.loads(data)
             return data.get('action'), data.get('payload')
+
+    def done_first(self):
+        self.redis.lpop(self.key)
