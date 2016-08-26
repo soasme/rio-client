@@ -4,9 +4,11 @@ from __future__ import absolute_import
 
 from collections import namedtuple
 
+from flask import g
 from flask import request
 
 from rio_client.base import Client
+from rio_client.dumps import dump
 
 
 class Current(namedtuple('Current', 'action project uuid')):
@@ -32,6 +34,15 @@ class Rio(object):
             app.extensions = {}
         app.extensions['rio'] = self
 
+        @app.before_request
+        def before_request():
+            g.rio_client_contextual = []
+
+        @app.teardown_request
+        def teardown_request():
+            for action, payload in g.rio_client_contextual:
+                self.emit_instantly(action, payload)
+
 
     def emit(self, action, payload, level='instant'):
         """Emit action."""
@@ -50,11 +61,12 @@ class Rio(object):
 
     def emit_context(self, action, payload):
         """ Emit on exiting request context."""
-        pass
+        dump(dump_config, action, payload)
+        return g.rio_client_contextual.append((action, payload, ))
 
     def emit_delayed(self, action, payload):
         """ Emit by an independent worker."""
-        pass
+        dump(dump_config, action, payload)
 
     @property
     def current(self):
