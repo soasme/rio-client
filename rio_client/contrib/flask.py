@@ -7,6 +7,7 @@ from collections import namedtuple
 from flask import g
 from flask import request
 from flask import current_app
+from werkzeug.utils import import_string
 
 from rio_client.base import Client
 
@@ -34,6 +35,9 @@ class Rio(object):
             app.extensions = {}
         app.extensions['rio'] = self
 
+        app.config.setdefault('RIO_CLIENT_DUMP_CLASS', 'rio_client.dump.SQLAlchemyDump')
+        app.config.setdefault('RIO_CLIENT_DUMP_PARAMS', {})
+
         @app.before_request
         def before_request():
             g.rio_client_contextual = []
@@ -43,13 +47,13 @@ class Rio(object):
             for action, payload in g.rio_client_contextual:
                 self.emit_instantly(action, payload)
 
+
     @property
     def dump_config(self):
         return {
-            'class': current_app.config.get('RIO_CLIENT_DUMP_CLASS'),
-            'params': current_app.config.get('RIO_CLIENT_DUMP_PARAMS'),
+            'class': current_app.config['RIO_CLIENT_DUMP_CLASS'],
+            'params': current_app.config.get('RIO_CLIENT_DUMP_PARAMS', {}),
         }
-
 
     def emit(self, action, payload, level='instant'):
         """Emit action."""
