@@ -16,7 +16,7 @@ rio.init_app(app)
 
 @app.route('/admin')
 def index():
-    rio.emit('admin.visit', {'ip': request.remote_addr}, 'delay')
+    rio.emit('admin.visit', {'ip': request.remote_addr}, rio.Level.DELAY)
     return 'hello world'
 
 if __name__ == '__main__':
