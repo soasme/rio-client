@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-class SQLAlchemyDump(object):
-
-    def dump(self, action, payload):
-        raise NotImplementedError
+import redis
 
 class RedisDump(object):
 
     def __init__(self, host, port, db, key):
-        self.redis = Redis(host=host, port=port, db=db)
+        self.redis = redis.Redis(host=host, port=port, db=db)
         self.key= key
 
     def dump(self, action, payload):
