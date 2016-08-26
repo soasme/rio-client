@@ -15,10 +15,10 @@ class Current(namedtuple('Current', 'action project uuid')):
 class Rio(object):
     """Flask extension for rio."""
 
-    def __init__(self, app=None):
+    def __init__(self, app=None, dsn=None):
         self.app = app
         if app is not None:
-            self.init_app(app)
+            self.init_app(app, dsn)
 
     def init_app(self, app, dsn=None):
         client_options = {}
