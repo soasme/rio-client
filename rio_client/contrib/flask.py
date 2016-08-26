@@ -18,6 +18,11 @@ class Current(namedtuple('Current', 'action project uuid')):
 class Rio(object):
     """Flask extension for rio."""
 
+    class Level:
+        INSTANT = 0
+        CONTEXTUAL = 1
+        DELAY = 2
+
     def __init__(self, app=None, dsn=None):
         self.app = app
         if app is not None:
@@ -58,13 +63,13 @@ class Rio(object):
             'params': current_app.config.get('RIO_CLIENT_DUMP_PARAMS', {}),
         }
 
-    def emit(self, action, payload, level='instant'):
+    def emit(self, action, payload, level=Level.INSTANT):
         """Emit action."""
-        if level == 'instant':
+        if level == self.Level.INSTANT:
             return self.emit_instantly(action, payload)
-        elif level == 'contextual':
+        elif level == self.Level.CONTEXTUAL:
             return self.emit_contextually(action, payload)
-        elif level == 'delay':
+        elif level == self.Level.DELAY:
             return self.emit_delayed(action, payload)
         else:
             raise Exception('InvalidEmitLevel: %s' % level)
