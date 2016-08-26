@@ -62,9 +62,9 @@ class Rio(object):
         """Emit action."""
         if level == 'instant':
             return self.emit_instantly(action, payload)
-        elif level == 'session':
+        elif level == 'contextual':
             return self.emit_contextually(action, payload)
-        elif level == 'later':
+        elif level == 'delay':
             return self.emit_delayed(action, payload)
         else:
             raise Exception('InvalidEmitLevel: %s' % level)
