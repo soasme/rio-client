@@ -49,7 +49,7 @@ class Rio(object):
         if level == 'instant':
             return self.emit_instantly(action, payload)
         elif level == 'session':
-            return self.emit_context(action, payload)
+            return self.emit_contextually(action, payload)
         elif level == 'later':
             return self.emit_delayed(action, payload)
         else:
@@ -59,7 +59,7 @@ class Rio(object):
         """ Emit instantly. """
         return self.client.emit(action, payload)
 
-    def emit_context(self, action, payload):
+    def emit_contextually(self, action, payload):
         """ Emit on exiting request context."""
         dump(dump_config, action, payload)
         return g.rio_client_contextual.append((action, payload, ))
