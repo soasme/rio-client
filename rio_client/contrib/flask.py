@@ -43,11 +43,12 @@ class Rio(object):
             g.rio_client_contextual = []
 
         @app.after_request
-        def after_request():
+        def after_request(response):
             dumper = self.dumper
             for action, payload in g.rio_client_contextual:
                 self.emit_instantly(action, payload)
                 dumper.remove(action, payload)
+            return response
 
 
     @property
@@ -89,14 +90,14 @@ class Rio(object):
                     break
                 action, payload = data
                 self.emit_instantly(action, payload)
-                dumper.done(action, payload)
+                dumper.remove(action, payload)
 
     @property
     def dumper(self):
         dump_class_string = self.dump_config['class']
         dump_class = import_string(dump_class_string)
         dump_params = self.dump_config['params']
-        return dump_class(dump_params)
+        return dump_class(**dump_params)
 
     def dump(self, action, payload):
         self.dumper.dump(action, payload)
