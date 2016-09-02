@@ -87,7 +87,7 @@ class Rio(object):
         """ Emit by an independent worker."""
         self.dump(action, payload)
 
-    def delay_emit(self):
+    def run_delayed_emits(self):
         dumper = self.dumper
         while True:
             with dumper.next() as data:
