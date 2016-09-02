@@ -59,8 +59,8 @@ class Rio(object):
     @property
     def dump_config(self):
         return {
-            'class': current_app.config['RIO_CLIENT_DUMP_CLASS'],
-            'params': current_app.config.get('RIO_CLIENT_DUMP_PARAMS', {}),
+            'class': current_app.config['RIO_DUMP_CLASS'],
+            'params': current_app.config.get('RIO_DUMP_PARAMS', {}),
         }
 
     def emit(self, action, payload, level=Level.INSTANT):
