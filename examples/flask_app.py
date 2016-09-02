@@ -8,7 +8,7 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'no-secret'
 app.config['RIO_DSN'] = 'http://docker:dummy@192.168.99.100:5010/1/project'
 app.config['RIO_TIMEOUT'] = 3
-app.config['RIO_CLIENT_DUMP_PARAMS'] = {'port': 6379, 'host': 'localhost', 'db': 0, 'key': 'rio-client-example'}
+app.config['RIO_DUMP_PARAMS'] = {'port': 6379, 'host': 'localhost', 'db': 0, 'key': 'rio-client-example'}
 
 
 rio = Rio()

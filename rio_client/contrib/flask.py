@@ -40,8 +40,8 @@ class Rio(object):
             app.extensions = {}
         app.extensions['rio'] = self
 
-        app.config.setdefault('RIO_CLIENT_DUMP_CLASS', 'rio_client.dump.redis.RedisDump')
-        app.config.setdefault('RIO_CLIENT_DUMP_PARAMS', {})
+        app.config.setdefault('RIO_DUMP_CLASS', 'rio_client.dump.redis.RedisDump')
+        app.config.setdefault('RIO_DUMP_PARAMS', {})
 
         @app.before_request
         def before_request():
