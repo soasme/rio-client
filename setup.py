@@ -14,7 +14,7 @@ requirements = [
 ]
 
 test_requirements = [
-    'pytest==2.9.1',
+    'pytest==9.0.3',
     'requests-mock==0.7.0',
 ]
 
